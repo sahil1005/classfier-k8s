@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: webserver-deployment
+spec:
+  replicas: 3
+  selector: 
+    matchLabels:
+      component: web
+  template:
+    metadata:
+      labels:
+        component: web      
+    spec:
+      containers:
+        - name: webserver
+          image: shanesoh/webserver 
+          ports: 
+            - containerPort: 80 
+          env:
+            - name: REDIS_HOST
+              value: redis
+            - name: REDIS_PORT
+              value: '6379'
+            - name: CLIENT_MAX_TRIES
+              value: "100"
+            - name: CLIENT_SLEEP
+              value: "0.25"
+            - name: IMAGE_CHANS
+              valueFrom:
+                configMapKeyRef:
+                  key: IMAGE_CHANS
+                  name: app-env
+            - name: IMAGE_DTYPE
+              valueFrom:
+                configMapKeyRef:
+                  key: IMAGE_DTYPE
+                  name: app-env
+            - name: IMAGE_HEIGHT
+              valueFrom:
+                configMapKeyRef:
+                  key: IMAGE_HEIGHT
+                  name: app-env
+            - name: IMAGE_QUEUE
+              valueFrom:
+                configMapKeyRef:
+                  key: IMAGE_QUEUE
+                  name: app-env
+            - name: IMAGE_WIDTH
+              valueFrom:
+                configMapKeyRef:
+                  key: IMAGE_WIDTH
+                  name: app-env
+            - name: REDIS_HOST
+              valueFrom:
+                configMapKeyRef:
+                  key: REDIS_HOST
+                  name: app-env      

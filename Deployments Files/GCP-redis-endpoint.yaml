@@ -1,0 +1,9 @@
+kind: Endpoints
+apiVersion: v1
+metadata: 
+  name: redis
+subsets:
+  - addresses:
+    - ip: 0.0.0.0  #chnage ip address with gcp redis endpoint
+    ports:
+      - port: 6379  

@@ -1,0 +1,14 @@
+apiVersion: v1
+data:
+  IMAGE_CHANS: "3"
+  IMAGE_DTYPE: float32
+  IMAGE_HEIGHT: "224"
+  IMAGE_QUEUE: image_queue
+  IMAGE_WIDTH: "224"
+  REDIS_HOST: redis
+kind: ConfigMap
+metadata:
+  creationTimestamp: null
+  labels:
+    component: web
+  name: app-env

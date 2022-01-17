@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: modelserver-deployment
+spec:
+  replicas: 3
+  selector:
+    matchLabels: 
+      component: server
+  template:
+    metadata:
+      labels:
+        component: server
+    spec:
+      containers:
+        - name: modelserver
+          image: shanesoh/modelserver
+          ports:
+            - containerPort: 5000
+          env:
+            - name: REDIS_HOST
+              value: redis
+            - name: REDIS_PORT
+              value: '6379'
+            - name: BATCH_SIZE
+              value: "32" 
+            - name: IMAGE_CHANS
+              valueFrom:
+                configMapKeyRef:
+                  key: IMAGE_CHANS
+                  name: app-env  
+            - name: IMAGE_DTYPE
+              valueFrom:
+                configMapKeyRef:
+                  key: IMAGE_DTYPE
+                  name: app-env           
+            - name: IMAGE_HEIGHT
+              valueFrom:
+                configMapKeyRef:
+                  key: IMAGE_HEIGHT
+                  name: app-env 
+            - name: IMAGE_QUEUE
+              valueFrom:
+                configMapKeyRef:
+                  key: IMAGE_QUEUE
+                  name: app-env
+            - name: IMAGE_WIDTH
+              valueFrom:
+                configMapKeyRef:
+                  key: IMAGE_WIDTH
+                  name: app-env   
+            - name: REDIS_HOST
+              valueFrom:
+                configMapKeyRef:
+                  key: REDIS_HOST
+                  name: app-env   
+            - name: SERVER_SLEEP
+              value: "0.25"      
