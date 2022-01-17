@@ -1,6 +1,6 @@
 #!/bin/bash
 LOCUST="locust"
-LOCUS_OPTS="-f /locust-tasks/test-case.py --host=$TARGET_HOST"
+LOCUS_OPTS="-f /locust-tasks/task.py --host=$TARGET_HOST"
 LOCUST_MODE=${LOCUST_MODE:-standalone}
 
 if [[ "$LOCUST_MODE" = "master" ]]; then
