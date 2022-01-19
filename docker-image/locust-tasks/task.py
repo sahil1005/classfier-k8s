@@ -15,6 +15,6 @@ class UserBehavior(TaskSet):
 
 
 class WebsiteUser(HttpUser):
-    task_set = UserBehavior
+    tasks = [UserBehavior]
     min_wait = 500
     max_wait = 5000
