@@ -18,21 +18,8 @@ pipeline {
 		    steps {
 			    sh 'whoami'
 			    script {
-				    myimage = docker.build("hellcasterexe/modelserver:${env.BUILD_ID}")
-					myimage = docker.build("hellcasterexe/webserver:${env.BUILD_ID}")
-			    }
-		    }
-	    }
-		
-	    stage("Push Docker Image") {
-		    steps {
-			    script {
-				    echo "Push Docker Image"
-				    withCredentials([string(credentialsId: 'dockerhub', variable: 'dockerhub')]) {
-            				sh "docker login -u ameintu -p ${dockerhub}"
-				    }
-				        myimage.push("${env.BUILD_ID}")
-				    
+				    myimage = docker.pull("hellcasterexe/modelserver:${env.BUILD_ID}")
+					myimage = docker.pull("hellcasterexe/webserver:${env.BUILD_ID}")
 			    }
 		    }
 	    }
