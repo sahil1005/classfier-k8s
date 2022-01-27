@@ -5,8 +5,8 @@ pipeline {
 	}
 	
 	environment {
-		PROJECT_ID = '<PROJECT_ID>'
-                CLUSTER_NAME = '<CLUSTER_NAME>'
+		PROJECT_ID = 'qwiklabs-gcp-04-6dcdf1856ead'
+                CLUSTER_NAME = 'classifier-cluster'
                 LOCATION = 'us-central1-c'
                 CREDENTIALS_ID = 'kubernetes'		
 	}
