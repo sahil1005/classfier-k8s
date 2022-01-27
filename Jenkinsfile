@@ -36,19 +36,11 @@ pipeline {
 			    sh 'whoami'
 			    script {
 				    myimage = docker.build("hellcasterexe/modelserver:${env.BUILD_ID}")
+					myimage = docker.build("hellcasterexe/webserver:${env.BUILD_ID}")
 			    }
 		    }
 	    }
 
-		stage('Build Docker Image') {
-		    steps {
-			    sh 'whoami'
-			    script {
-				    myimage = docker.build("hellcasterexe/webserver:${env.BUILD_ID}")
-			    }
-		    }
-	    }
-	    
 	    stage("Push Docker Image") {
 		    steps {
 			    script {
