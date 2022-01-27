@@ -1,9 +1,5 @@
 pipeline {
     agent any
-	tools {
-		maven 'Maven'
-	}
-	
 	environment {
 		PROJECT_ID = 'qwiklabs-gcp-04-6dcdf1856ead'
                 CLUSTER_NAME = 'classifier-cluster'
@@ -15,19 +11,6 @@ pipeline {
 	    stage('Scm Checkout') {
 		    steps {
 			    checkout scm
-		    }
-	    }
-	    
-	    stage('Build') {
-		    steps {
-			    sh 'mvn clean package'
-		    }
-	    }
-	    
-	    stage('Test') {
-		    steps {
-			    echo "Testing..."
-			    sh 'mvn test'
 		    }
 	    }
 	    
