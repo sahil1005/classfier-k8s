@@ -14,16 +14,6 @@ pipeline {
 		    }
 	    }
 	    
-	    stage('Build Docker Image') {
-		    steps {
-			    sh 'whoami'
-			    script {
-				    myimage = docker.pull("hellcasterexe/modelserver:${env.BUILD_ID}")
-					myimage = docker.pull("hellcasterexe/webserver:${env.BUILD_ID}")
-			    }
-		    }
-	    }
-	    
 	    stage('Deploy to K8s') {
 		    steps{
 			    echo "Deployment started ..."
