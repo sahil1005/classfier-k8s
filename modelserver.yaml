@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: modelserver
-          image: shanesoh/modelserver
+          image: hellcasterexe/modelserver:tagversion
           ports:
             - containerPort: 5000
           env:
@@ -55,4 +55,17 @@ spec:
                   key: REDIS_HOST
                   name: app-env   
             - name: SERVER_SLEEP
-              value: "0.25"      
+              value: "0.25" 
+
+---
+apiVersion: v1 
+kind: Service
+metadata:
+  name: modelserver-service
+spec:
+  type: ClusterIP
+  selector:
+    component: server
+  ports:
+    - port: 5000
+      targetPort: 5000                                   

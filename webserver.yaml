@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: webserver
-          image: shanesoh/webserver 
+          image: hellcasterexe/webserver:tagversion 
           ports: 
             - containerPort: 80 
           env:
@@ -55,4 +55,18 @@ spec:
               valueFrom:
                 configMapKeyRef:
                   key: REDIS_HOST
-                  name: app-env      
+                  name: app-env
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: webserver-service
+spec:
+  type: LoadBalancer
+  selector:
+    component: web 
+  ports: 
+    - port: 80
+      targetPort: 80
+                              
