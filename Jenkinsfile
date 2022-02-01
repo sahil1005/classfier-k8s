@@ -27,18 +27,30 @@ pipeline {
 				}
 	    }
 	    
-	    stage("Push Docker Image") {
+	    stage("Docker Login") {
 		    steps {
 			    script {
-				    echo "Push Docker Image"
+				    echo "Docker Login"
 				    withCredentials([string(credentialsId: 'dockerhub', variable: 'dockerhub')]) {
             				sh "docker login -u hellcasterexe -p ${dockerhub}"
-				    }
-				        myimage.push("${env.BUILD_ID}")
-				    
+				    }  
 			    }
 		    }
 	    }
+
+		stage("Docker push image modelserver") {
+			steps {
+				sh "docker push hellcasterexe/modelserver:${env.BUILD_ID}"
+			}
+
+		}
+
+		stage("Docker push image webserver") {
+			steps {
+				sh "docker push hellcasterexe/webserver:${env.BUILD_ID}"
+			}
+
+		}
 	    
 	    stage('Deploy to K8s') {
 		    steps{
