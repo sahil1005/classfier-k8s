@@ -2,7 +2,7 @@ pipeline {
     agent any
 	
 	environment {
-		PROJECT_ID = 'qwiklabs-gcp-01-cef1cc5a7e12'
+		PROJECT_ID = 'qwiklabs-gcp-00-10c2f43b64a0'
                 CLUSTER_NAME = 'classifier-project'
                 LOCATION = 'us-central1-c'
                 CREDENTIALS_ID = 'kubernetes'		
@@ -17,13 +17,21 @@ pipeline {
 	    
 	    stage('Build Docker Image modelserver') {
 		    steps {
-			    sh "docker build -t hellcasterexe/modelserver:${env.BUILD_ID} ./modelserver"
+				sh 'whoami'
+			    script {
+					myimage = docker.build("hellcasterexe/modelserver:${env.BUILD_ID} ./modelserver")
+
+					} 
 				}
 	    }
 
 		stage('Build Docker Image webserver') {
 		    steps {
-			    sh "docker build -t hellcasterexe/webserver:${env.BUILD_ID} ./webserver"
+				sh 'whoami'
+			    script {
+					myimage = docker.build("hellcasterexe/webserver:${env.BUILD_ID} ./webserver")
+					
+					} 
 				}
 	    }
 	    
@@ -40,14 +48,18 @@ pipeline {
 
 		stage("Docker push image modelserver") {
 			steps {
-				sh "docker push hellcasterexe/modelserver:${env.BUILD_ID}"
+				script {
+					myimage.push("hellcasterexe/modelserver${env.BUILD_ID}")
+				}
 			}
 
 		}
 
 		stage("Docker push image webserver") {
 			steps {
-				sh "docker push hellcasterexe/webserver:${env.BUILD_ID}"
+				script {
+					myimage.push("hellcasterexe/webserver${env.BUILD_ID}")
+				}
 			}
 
 		}
