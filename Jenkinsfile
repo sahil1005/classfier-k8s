@@ -2,8 +2,8 @@ pipeline {
     agent any
 	
 	environment {
-		PROJECT_ID = 'qwiklabs-gcp-01-770f8f7f5c74'
-                CLUSTER_NAME = 'k8s-cluster'
+		PROJECT_ID = 'qwiklabs-gcp-01-2f75fde195d2'
+                CLUSTER_NAME = 'classifier-project'
                 LOCATION = 'us-central1-c'
                 CREDENTIALS_ID = 'kubernetes'		
 	}
