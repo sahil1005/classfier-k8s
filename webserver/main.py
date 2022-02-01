@@ -44,7 +44,7 @@ def prepare_image(image, target):
 
 @app.get("/")
 def index():
-    return "Hello World! v1"
+    return "Hello World! v1.0.0"
 
 
 @app.post("/predict")
