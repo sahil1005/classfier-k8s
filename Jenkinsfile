@@ -18,6 +18,7 @@ pipeline {
 	    stage('Build Docker Image') {
 		    steps {
 			    sh "docker build -t hellcasterexe/modelserver:${env.BUILD_ID} ./modelserver"
+				sh "cd .."
 				sn "docker build -t hellcasterexe/webserver:${env.BUILD_ID} ./webserver"
 		    }
 	    }
