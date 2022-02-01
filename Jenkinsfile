@@ -23,7 +23,7 @@ pipeline {
 
 		stage('Build Docker Image webserver') {
 		    steps {
-			    sh "docker build -t hellcasterexe/weblserver:${env.BUILD_ID} ./webserver"
+			    sh "docker build -t hellcasterexe/webserver:${env.BUILD_ID} ./webserver"
 				}
 	    }
 	    
@@ -47,7 +47,7 @@ pipeline {
 
 		stage("Docker push image webserver") {
 			steps {
-				sh "docker push hellcasterexe/weblserver:${env.BUILD_ID}"
+				sh "docker push hellcasterexe/webserver:${env.BUILD_ID}"
 			}
 
 		}
