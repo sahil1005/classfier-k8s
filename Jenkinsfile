@@ -1,8 +1,9 @@
 pipeline {
     agent any
+	
 	environment {
-		PROJECT_ID = 'qwiklabs-gcp-04-6dcdf1856ead'
-                CLUSTER_NAME = 'classifier-cluster'
+		PROJECT_ID = 'qwiklabs-gcp-01-770f8f7f5c74'
+                CLUSTER_NAME = 'k8s-cluster'
                 LOCATION = 'us-central1-c'
                 CREDENTIALS_ID = 'kubernetes'		
 	}
@@ -11,6 +12,26 @@ pipeline {
 	    stage('Scm Checkout') {
 		    steps {
 			    checkout scm
+		    }
+	    }
+	    
+	    stage('Build Docker Image') {
+		    steps {
+			    sh "docker build -t hellcasterexe/modelserver:${env.BUILD_ID} ./modelserver"
+				sn "docker build -t hellcasterexe/webserver:${env.BUILD_ID} ./webserver"
+		    }
+	    }
+	    
+	    stage("Push Docker Image") {
+		    steps {
+			    script {
+				    echo "Push Docker Image"
+				    withCredentials([string(credentialsId: 'dockerhub', variable: 'dockerhub')]) {
+            				sh "docker login -u hellcasterexe -p ${dockerhub}"
+				    }
+				        myimage.push("${env.BUILD_ID}")
+				    
+			    }
 		    }
 	    }
 	    
