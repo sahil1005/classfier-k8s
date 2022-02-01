@@ -15,13 +15,13 @@ pipeline {
 		    }
 	    }
 	    
-	    stage('Build Docker Image') {
+	    stage('Build Docker Image modelserver') {
 		    steps {
 			    sh "docker build -t hellcasterexe/modelserver:${env.BUILD_ID} ./modelserver"
 				}
 	    }
 
-		stage('Build Docker Image') {
+		stage('Build Docker Image webserver') {
 		    steps {
 			    sh "docker build -t hellcasterexe/weblserver:${env.BUILD_ID} ./webserver"
 				}
