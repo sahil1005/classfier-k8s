@@ -2,8 +2,8 @@ pipeline {
     agent any
 	
 	environment {
-		PROJECT_ID = 'qwiklabs-gcp-00-10c2f43b64a0'
-                CLUSTER_NAME = 'classifier-project'
+		PROJECT_ID = 'ppedetonline'
+                CLUSTER_NAME = 'ppedetonline-cluster'
                 LOCATION = 'us-central1-c'
                 CREDENTIALS_ID = 'kubernetes'		
 	}
@@ -19,8 +19,7 @@ pipeline {
 		    steps {
 				sh 'whoami'
 			    script {
-					myimage = docker.build("hellcasterexe/modelserver:${env.BUILD_ID} ./modelserver")
-
+					myimage = docker.build("hellcasterexe/modelserver:${env.BUILD_ID}") ./modelserver
 					} 
 				}
 	    }
@@ -29,8 +28,7 @@ pipeline {
 		    steps {
 				sh 'whoami'
 			    script {
-					myimage = docker.build("hellcasterexe/webserver:${env.BUILD_ID} ./webserver")
-					
+						myimage = docker.build("hellcasterexe/webserver:${env.BUILD_ID}") ./webserver
 					} 
 				}
 	    }
