@@ -19,48 +19,45 @@ pipeline {
 		    steps {
 				sh 'whoami'
 			    script {
-					myimage = docker.build("hellcasterexe/modelserver:${env.BUILD_ID}") ./modelserver
+					myimage = docker.build("hellcasterexe/modelserver:${env.BUILD_ID}", "./modelserver") 
 					} 
 				}
 	    }
 
-		stage('Build Docker Image webserver') {
-		    steps {
-				sh 'whoami'
-			    script {
-						myimage = docker.build("hellcasterexe/webserver:${env.BUILD_ID}") ./webserver
-					} 
-				}
-	    }
-	    
-	    stage("Docker Login") {
+	    stage("Push Docker Image modelserver") {
 		    steps {
 			    script {
 				    echo "Docker Login"
 				    withCredentials([string(credentialsId: 'dockerhub', variable: 'dockerhub')]) {
             				sh "docker login -u hellcasterexe -p ${dockerhub}"
 				    }  
+					 myimage.push("${env.BUILD_ID}")
 			    }
 		    }
 	    }
 
-		stage("Docker push image modelserver") {
-			steps {
-				script {
-					myimage.push("hellcasterexe/modelserver${env.BUILD_ID}")
+		stage('Build Docker Image webserver') {
+		    steps {
+				sh 'whoami'
+			    script {
+						myimage = docker.build("hellcasterexe/webserver:${env.BUILD_ID}", "./webserver") 
+					} 
 				}
-			}
+	    }
 
-		}
+		stage("Push Docker Image webserver") {
+		    steps {
+			    script {
+				    echo "Docker Login"
+				    withCredentials([string(credentialsId: 'dockerhub', variable: 'dockerhub')]) {
+            				sh "docker login -u hellcasterexe -p ${dockerhub}"
+				    }  
+					 myimage.push("${env.BUILD_ID}")
+			    }
+		    }
+	    }
 
-		stage("Docker push image webserver") {
-			steps {
-				script {
-					myimage.push("hellcasterexe/webserver${env.BUILD_ID}")
-				}
-			}
 
-		}
 	    
 	    stage('Deploy to K8s') {
 		    steps{
