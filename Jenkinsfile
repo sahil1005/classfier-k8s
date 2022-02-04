@@ -2,7 +2,7 @@ pipeline {
     agent any
 	
 	environment {
-		PROJECT_ID = 'ppedetonline-340207'
+		PROJECT_ID = 'ppedetonline'
                 CLUSTER_NAME = 'ppedetonline-cluster'
                 LOCATION = 'us-central1-c'
                 CREDENTIALS_ID = 'kubernetes'		

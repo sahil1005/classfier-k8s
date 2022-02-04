@@ -1,7 +1,7 @@
 steps:
 #First Clone from Google Cloud Source Repository  
 - name: 'gcr.io/cloud-builders/git'
-  args: ['clone','https://github.com/nsembleai/classifier-cicd-kubernetes.git']
+  args: ['clone','https://github.com/sahil1005/classfier-k8s.git']
 
 #Build the image 
 - name: 'gcr.io/cloud-builders/docker'
@@ -10,17 +10,35 @@ steps:
 #Push the image  
 - name: 'gcr.io/cloud-builders/docker'
   args: ['push','gcr.io/${_PROJECT}/modelserver:${_VERSION}']
+
+#Build the image 
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['build','-t','gcr.io/${_PROJECT}/webserver:${_VERSION}','./webserver']
+
+#Push the image  
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['push','gcr.io/${_PROJECT}/webserver:${_VERSION}']  
   
 #Update the container image using kubectl set
 - name: 'gcr.io/cloud-builders/kubectl'
   args:
   - 'set'
   - 'image'
-  - 'deployment/${_DEPLOYMENTNAME}'
-  - '${_CONTAINERNAME}=gcr.io/${_PROJECT}/${_CONTAINERNAME}:${_VERSION}'
+  - 'deployment/${__DEPLOYMENTNAME}'
+  - 'modelserver=gcr.io/${_PROJECT}/modelserver:${_VERSION}'
   env:
   - 'CLOUDSDK_COMPUTE_ZONE=${_ZONE}'
   - 'CLOUDSDK_CONTAINER_CLUSTER=${_GKE_CLUSTER}'
+
+- name: 'gcr.io/cloud-builders/kubectl'
+  args:
+  - 'set'
+  - 'image'
+  - 'deployment/${_DEPLOYMENTNAME}'
+  - 'webserver=gcr.io/${_PROJECT}/webserver:${_VERSION}'
+  env:
+  - 'CLOUDSDK_COMPUTE_ZONE=${_ZONE}'
+  - 'CLOUDSDK_CONTAINER_CLUSTER=${_GKE_CLUSTER}'  
   
 substitutions:
     #GCP Specific configuration. Please DON'T change anything
@@ -29,11 +47,13 @@ substitutions:
     _GKE_CLUSTER: ppedetonline-cluster
     
     #Repository Specific configuration. DevOps can change this settings
-    _DEPLOYMENTNAME: hello-world-service   
-    _REPO_NAME: classifier-cicd-kubernetes
+    __DEPLOYMENTNAME: modelserver 
+    _DEPLOYMENTNAME: webserver  
+    _REPO_NAME: classfier-k8s
     
     # Developers ONLY change
     _VERSION: v1.0
     
 options:
     substitution_option: 'ALLOW_LOOSE'
+
