@@ -1,11 +1,10 @@
 steps:
 
-- name: "gcr.io/cloud-builders/gke-deploy"
-  args:
-  - run
-  - --filename=app-env/app-env-configmap.yaml
-  - --location=${_ZONE}
-  - --cluster=${_GKE_CLUSTER}  
+- name: 'gcr.io/cloud-builders/kubectl'
+  args: ['apply', '-f', 'app-env/app-env-configmap']
+  env:
+    - 'location=${_ZONE}'
+    - 'cluster=${_GKE_CLUSTER}'
 
 
 
@@ -18,11 +17,13 @@ steps:
   # deploy container image to GKE
 - name: "gcr.io/cloud-builders/gke-deploy"
   args:
-  - run
-  - --filename=deployment-file/modelserver.yaml
-  - --image=gcr.io/${_PROJECT}/modelserver:${_VERSION}
-  - --location=${_ZONE}
-  - --cluster=${_GKE_CLUSTER}
+  - 'set'
+  - 'image'
+  - 'deployment/modelserver'
+  - 'modelserver=gcr.io/${_PROJECT}/modelserver:${_VERSION}'
+  env:
+  - 'location=${_ZONE}'
+  - 'cluster=${_GKE_CLUSTER}'
 
 
   # build the container image webserver
@@ -34,11 +35,13 @@ steps:
   # deploy container image to GKE
 - name: "gcr.io/cloud-builders/gke-deploy"
   args:
-  - run
-  - --filename=deployment-file/webserver.yaml
-  - --image=gcr.io/${_PROJECT}/webserver:${_VERSION}
-  - --location=${_ZONE}
-  - --cluster=${_GKE_CLUSTER}  
+  - 'set'
+  - 'image'
+  - 'deployment/webserver'
+  - 'modelserver=gcr.io/${_PROJECT}/modelserver:${_VERSION}'
+  env:
+  - 'location=${_ZONE}'
+  - 'cluster=${_GKE_CLUSTER}'  
 
 substitutions:
     #GCP Specific configuration. Please DON'T change anything
