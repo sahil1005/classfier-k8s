@@ -3,57 +3,51 @@ steps:
 - name: 'gcr.io/cloud-builders/git'
   args: ['clone','https://github.com/sahil1005/classfier-k8s.git']
 
-#Build the image 
-- name: 'gcr.io/cloud-builders/docker'
-  args: ['build','-t','gcr.io/${_PROJECT}/modelserver:${_VERSION}','./modelserver']
-
-#Push the image  
-- name: 'gcr.io/cloud-builders/docker'
-  args: ['push','gcr.io/${_PROJECT}/modelserver:${_VERSION}']
-
-#Build the image 
-- name: 'gcr.io/cloud-builders/docker'
-  args: ['build','-t','gcr.io/${_PROJECT}/webserver:${_VERSION}','./webserver']
-
-#Push the image  
-- name: 'gcr.io/cloud-builders/docker'
-  args: ['push','gcr.io/${_PROJECT}/webserver:${_VERSION}']  
-  
-#Update the container image using kubectl set
-- name: 'gcr.io/cloud-builders/kubectl'
+- name: "gcr.io/cloud-builders/gke-deploy"
   args:
-  - 'set'
-  - 'image'
-  - 'deployment/${__DEPLOYMENTNAME}'
-  - 'modelserver=gcr.io/${_PROJECT}/modelserver:${_VERSION}'
-  env:
-  - 'CLOUDSDK_COMPUTE_ZONE=${_ZONE}'
-  - 'CLOUDSDK_CONTAINER_CLUSTER=${_GKE_CLUSTER}'
+  - run
+  - --filename=app-env-configmap
+  - --location=${_ZONE}
+  - --cluster=${_GKE_CLUSTER}  
 
-- name: 'gcr.io/cloud-builders/kubectl'
+
+
+  # build the container image modelserver
+- name: "gcr.io/cloud-builders/docker"
+  args: ["build", "-t", "gcr.io/${_PROJECT}/modelserver:${_VERSION}", "./modelserver"]
+  # push container image modelserver
+- name: "gcr.io/cloud-builders/docker"
+  args: ["push", "gcr.io/${_PROJECT}/modelserver:${_VERSION}"]
+  # deploy container image to GKE
+- name: "gcr.io/cloud-builders/gke-deploy"
   args:
-  - 'set'
-  - 'image'
-  - 'deployment/${_DEPLOYMENTNAME}'
-  - 'webserver=gcr.io/${_PROJECT}/webserver:${_VERSION}'
-  env:
-  - 'CLOUDSDK_COMPUTE_ZONE=${_ZONE}'
-  - 'CLOUDSDK_CONTAINER_CLUSTER=${_GKE_CLUSTER}'  
-  
+  - run
+  - --filename=modelserver
+  - --image=gcr.io/${_PROJECT}/modelserver:${_VERSION}
+  - --location=${_ZONE}
+  - --cluster=${_GKE_CLUSTER}
+
+
+  # build the container image webserver
+- name: "gcr.io/cloud-builders/docker"
+  args: ["build", "-t", "gcr.io/${_PROJECT}/webserver:${_VERSION}", "./webserver"]
+  # push container image webserver
+- name: "gcr.io/cloud-builders/docker"
+  args: ["push", "gcr.io/${_PROJECT}/webserver:${_VERSION}"]
+  # deploy container image to GKE
+- name: "gcr.io/cloud-builders/gke-deploy"
+  args:
+  - run
+  - --filename=webserver
+  - --image=gcr.io/${_PROJECT}/webserver:${_VERSION}
+  - --location=${_ZONE}
+  - --cluster=${_GKE_CLUSTER}  
+
 substitutions:
     #GCP Specific configuration. Please DON'T change anything
     _PROJECT: ppedetonline
     _ZONE: asia-south1-a
-    _GKE_CLUSTER: ppedetonline-cluster
-    
-    #Repository Specific configuration. DevOps can change this settings
-    __DEPLOYMENTNAME: modelserver 
-    _DEPLOYMENTNAME: webserver  
-    _REPO_NAME: classfier-k8s
-    
-    # Developers ONLY change
-    _VERSION: v1.0
-    
-options:
-    substitution_option: 'ALLOW_LOOSE'
+    _GKE_CLUSTER: ppedetonline-cluster  
 
+    # Developers ONLY change
+    _VERSION: v1.0  
