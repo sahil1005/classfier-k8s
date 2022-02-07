@@ -45,7 +45,7 @@ steps:
 
 substitutions:
     #GCP Specific configuration. Please DON'T change anything
-    _PROJECT: ppedetonline
+    _PROJECT: ppedetonline-340207
     _ZONE: asia-south1-a
     _GKE_CLUSTER: ppedetonline-cluster  
 
