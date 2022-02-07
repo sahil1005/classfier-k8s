@@ -19,7 +19,7 @@ steps:
 - name: "gcr.io/cloud-builders/gke-deploy"
   args:
   - run
-  - --filename=modelserver
+  - --filename=deployment-file/modelserver.yaml
   - --image=gcr.io/${_PROJECT}/modelserver:${_VERSION}
   - --location=${_ZONE}
   - --cluster=${_GKE_CLUSTER}
@@ -35,7 +35,7 @@ steps:
 - name: "gcr.io/cloud-builders/gke-deploy"
   args:
   - run
-  - --filename=webserver
+  - --filename=deployment-file/webserver.yaml
   - --image=gcr.io/${_PROJECT}/webserver:${_VERSION}
   - --location=${_ZONE}
   - --cluster=${_GKE_CLUSTER}  

@@ -1,46 +1,44 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: webserver-deployment
+  name: modelserver-deployment
 spec:
   replicas: 3
-  selector: 
-    matchLabels:
-      component: web
+  selector:
+    matchLabels: 
+      component: server
   template:
     metadata:
       labels:
-        component: web      
+        component: server
     spec:
       containers:
-        - name: webserver
-          image: hellcasterexe/webserver:tagversion 
-          ports: 
-            - containerPort: 80 
+        - name: modelserver
+          image: gcr.io/${_PROJECT}/modelserver
+          ports:
+            - containerPort: 5000
           env:
             - name: REDIS_HOST
               value: redis
             - name: REDIS_PORT
               value: '6379'
-            - name: CLIENT_MAX_TRIES
-              value: "100"
-            - name: CLIENT_SLEEP
-              value: "0.25"
+            - name: BATCH_SIZE
+              value: "32" 
             - name: IMAGE_CHANS
               valueFrom:
                 configMapKeyRef:
                   key: IMAGE_CHANS
-                  name: app-env
+                  name: app-env  
             - name: IMAGE_DTYPE
               valueFrom:
                 configMapKeyRef:
                   key: IMAGE_DTYPE
-                  name: app-env
+                  name: app-env           
             - name: IMAGE_HEIGHT
               valueFrom:
                 configMapKeyRef:
                   key: IMAGE_HEIGHT
-                  name: app-env
+                  name: app-env 
             - name: IMAGE_QUEUE
               valueFrom:
                 configMapKeyRef:
@@ -50,23 +48,24 @@ spec:
               valueFrom:
                 configMapKeyRef:
                   key: IMAGE_WIDTH
-                  name: app-env
+                  name: app-env   
             - name: REDIS_HOST
               valueFrom:
                 configMapKeyRef:
                   key: REDIS_HOST
-                  name: app-env
+                  name: app-env   
+            - name: SERVER_SLEEP
+              value: "0.25" 
 
 ---
-apiVersion: v1
+apiVersion: v1 
 kind: Service
 metadata:
-  name: webserver-service
+  name: modelserver-service
 spec:
-  type: LoadBalancer
+  type: ClusterIP
   selector:
-    component: web 
-  ports: 
-    - port: 80
-      targetPort: 80
-                              
+    component: server
+  ports:
+    - port: 5000
+      targetPort: 5000                                   
