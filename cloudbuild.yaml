@@ -3,7 +3,7 @@ steps:
 - name: "gcr.io/cloud-builders/gke-deploy"
   args:
   - run
-  - --filename=./app-env-configmap.yaml
+  - --filename=app-env/app-env-configmap.yaml
   - --location=${_ZONE}
   - --cluster=${_GKE_CLUSTER}  
 
