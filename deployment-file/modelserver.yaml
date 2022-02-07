@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: modelserver
-          image: gcr.io/${_PROJECT}/modelserver
+          image: gcr.io/${_PROJECT}/modelserver:${_VERSION}
           ports:
             - containerPort: 5000
           env:
