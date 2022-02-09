@@ -4,7 +4,7 @@ steps:
   args: ['clone','https://github.com/sahil1005/classfier-k8s.git']
 
 - name: 'gcr.io/cloud-builders/gke-deploy'
-  args: ['apply', '-f', 'app-env/app-env-configmap']
+  args: ['apply', '-f', "app-env/app-env-configmap"]
   env:
     - 'location=${_ZONE}'
     - 'cluster=${_GKE_CLUSTER}'
