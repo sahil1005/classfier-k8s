@@ -6,8 +6,8 @@ steps:
 - name: 'gcr.io/cloud-builders/kubectl'
   args: ['apply', '-f', 'app-env-configmap.yaml']
   env:
-    - 'location=${_ZONE}'
-    - 'cluster=${_GKE_CLUSTER}'
+    - 'CLOUDSDK_COMPUTE_ZONE=${_ZONE}'
+    - 'CLOUDSDK_CONTAINER_CLUSTER=${_GKE_CLUSTER}'
 
 
 
@@ -25,8 +25,8 @@ steps:
   - 'deployment/modelserver'
   - 'modelserver=gcr.io/${_PROJECT}/modelserver:${_VERSION}'
   env:
-  - 'location=${_ZONE}'
-  - 'cluster=${_GKE_CLUSTER}'
+    - 'CLOUDSDK_COMPUTE_ZONE=${_ZONE}'
+    - 'CLOUDSDK_CONTAINER_CLUSTER=${_GKE_CLUSTER}'
 
 
   # build the container image webserver
@@ -43,8 +43,8 @@ steps:
   - 'deployment/webserver'
   - 'webserver=gcr.io/${_PROJECT}/webserver:${_VERSION}'
   env:
-  - 'location=${_ZONE}'
-  - 'cluster=${_GKE_CLUSTER}'  
+    -  'CLOUDSDK_COMPUTE_ZONE=${_ZONE}'
+    - 'CLOUDSDK_CONTAINER_CLUSTER=${_GKE_CLUSTER}' 
 
 substitutions:
     #GCP Specific configuration. Please DON'T change anything
