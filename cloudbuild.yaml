@@ -2,15 +2,7 @@ steps:
 
 - name: 'gcr.io/cloud-builders/git'
   args: ['clone','https://github.com/sahil1005/classfier-k8s.git']
-
-- name: 'gcr.io/cloud-builders/kubectl'
-  args: ['apply', '-f', 'app-env-configmap.yaml']
-  env:
-    - 'CLOUDSDK_COMPUTE_ZONE=${_ZONE}'
-    - 'CLOUDSDK_CONTAINER_CLUSTER=${_GKE_CLUSTER}'
-
-
-
+  
   # build the container image modelserver
 - name: "gcr.io/cloud-builders/docker"
   args: ["build", "-t", "gcr.io/${_PROJECT}/modelserver:${_VERSION}", "./modelserver"]
