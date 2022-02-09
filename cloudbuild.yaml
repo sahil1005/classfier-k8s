@@ -2,7 +2,7 @@ steps:
 
 - name: 'gcr.io/cloud-builders/git'
   args: ['clone','https://github.com/sahil1005/classfier-k8s.git']
-  
+
   # build the container image modelserver
 - name: "gcr.io/cloud-builders/docker"
   args: ["build", "-t", "gcr.io/${_PROJECT}/modelserver:${_VERSION}", "./modelserver"]
@@ -14,7 +14,7 @@ steps:
   args:
   - 'set'
   - 'image'
-  - 'deployment/modelserver'
+  - 'deployment/modelserver-deployment'
   - 'modelserver=gcr.io/${_PROJECT}/modelserver:${_VERSION}'
   env:
     - 'CLOUDSDK_COMPUTE_ZONE=${_ZONE}'
@@ -32,7 +32,7 @@ steps:
   args:
   - 'set'
   - 'image'
-  - 'deployment/webserver'
+  - 'deployment/webserver-deployment'
   - 'webserver=gcr.io/${_PROJECT}/webserver:${_VERSION}'
   env:
     -  'CLOUDSDK_COMPUTE_ZONE=${_ZONE}'
