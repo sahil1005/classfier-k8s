@@ -1,5 +1,8 @@
 steps:
 
+- name: 'gcr.io/cloud-builders/git'
+  args: ['clone','https://github.com/sahil1005/classfier-k8s.git']
+
 - name: 'gcr.io/cloud-builders/gke-deploy'
   args: ['apply', '-f', 'app-env/app-env-configmap']
   env:
