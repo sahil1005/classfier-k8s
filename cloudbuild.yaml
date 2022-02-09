@@ -35,7 +35,7 @@ steps:
   - 'deployment/webserver-deployment'
   - 'webserver=gcr.io/${_PROJECT}/webserver:${_VERSION}'
   env:
-    -  'CLOUDSDK_COMPUTE_ZONE=${_ZONE}'
+    - 'CLOUDSDK_COMPUTE_ZONE=${_ZONE}'
     - 'CLOUDSDK_CONTAINER_CLUSTER=${_GKE_CLUSTER}' 
 
 substitutions:
