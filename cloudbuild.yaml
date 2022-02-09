@@ -38,7 +38,7 @@ steps:
   - 'set'
   - 'image'
   - 'deployment/webserver'
-  - 'modelserver=gcr.io/${_PROJECT}/modelserver:${_VERSION}'
+  - 'webserver=gcr.io/${_PROJECT}/webserver:${_VERSION}'
   env:
   - 'location=${_ZONE}'
   - 'cluster=${_GKE_CLUSTER}'  
