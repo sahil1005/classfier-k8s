@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: modelserver
-          image: gcr.io/ppedetonline-340207/modelserver
+          image: asia.gcr.io/ppedetonline/modelserver:tagversion
           ports:
             - containerPort: 5000
           env:

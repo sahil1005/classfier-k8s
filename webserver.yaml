@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: webserver
-          image: gcr.io/ppedetonline-340207/webserver
+          image: asia.gcr.io/ppedetonline/webserver:tagversion 
           ports: 
             - containerPort: 80 
           env:

@@ -4,8 +4,9 @@ pipeline {
 	environment {
 		PROJECT_ID = 'ppedetonline'
                 CLUSTER_NAME = 'ppedetonline-cluster'
-                LOCATION = 'us-central1-c'
-                CREDENTIALS_ID = 'kubernetes'		
+                LOCATION = 'asia-south1-a'
+                CREDENTIALS_ID = 'kubernetes'
+						
 	}
 	
     stages {
@@ -19,40 +20,54 @@ pipeline {
 		    steps {
 				sh 'whoami'
 			    script {
-					myimage = docker.build("hellcasterexe/modelserver:${env.BUILD_ID}", "./modelserver") 
+					myimage = docker.build("asia.gcr.io/ppedetonline/modelserver:${env.BUILD_ID}", "./modelserver") 
 					} 
 				}
 	    }
 
-	    stage("Push Docker Image modelserver") {
+		stage("Pushing modelserver image to gcr.io") {
 		    steps {
 			    script {
-				    echo "Docker Login"
-				    withCredentials([string(credentialsId: 'dockerhub', variable: 'dockerhub')]) {
-            				sh "docker login -u hellcasterexe -p ${dockerhub}"
-				    }  
-					 myimage.push("${env.BUILD_ID}")
+				   withCredentials([file(credentialsId: 'gcr', variable: 'GC_KEY')]){
+              sh "cat '$GC_KEY' | docker login -u _json_key --password-stdin https://asia.gcr.io"
+              sh "gcloud auth activate-service-account --key-file='$GC_KEY'"
+              sh "gcloud auth configure-docker"
+              GLOUD_AUTH = sh (
+                    script: 'gcloud auth print-access-token',
+                    returnStdout: true
+                ).trim()
+              echo "Pushing image To GCR"
+              sh "docker push asia.gcr.io/ppedetonline/modelserver:${env.BUILD_ID}"
+          			}  
 			    }
 		    }
 	    }
+
+
 
 		stage('Build Docker Image webserver') {
 		    steps {
 				sh 'whoami'
 			    script {
-						myimage = docker.build("hellcasterexe/webserver:${env.BUILD_ID}", "./webserver") 
+						myimage = docker.build("asia.gcr.io/ppedetonline/webserver:${env.BUILD_ID}", "./webserver") 
 					} 
 				}
 	    }
 
-		stage("Push Docker Image webserver") {
+		stage("Pushing webserver image to gcr.io") {
 		    steps {
 			    script {
-				    echo "Docker Login"
-				    withCredentials([string(credentialsId: 'dockerhub', variable: 'dockerhub')]) {
-            				sh "docker login -u hellcasterexe -p ${dockerhub}"
-				    }  
-					 myimage.push("${env.BUILD_ID}")
+				   withCredentials([file(credentialsId: 'gcr', variable: 'GC_KEY')]){
+              sh "cat '$GC_KEY' | docker login -u _json_key --password-stdin https://asia.gcr.io"
+              sh "gcloud auth activate-service-account --key-file='$GC_KEY'"
+              sh "gcloud auth configure-docker"
+              GLOUD_AUTH = sh (
+                    script: 'gcloud auth print-access-token',
+                    returnStdout: true
+                ).trim()
+              echo "Pushing image To GCR"
+              sh "docker push asia.gcr.io/ppedetonline/webserver:${env.BUILD_ID}"
+          			}  
 			    }
 		    }
 	    }
